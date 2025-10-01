@@ -1,0 +1,282 @@
+{
+  "exercise1": {
+    "productions": {
+      "S": [
+        [
+          "A",
+          "uno",
+          "B",
+          "C"
+        ],
+        [
+          "S",
+          "dos"
+        ]
+      ],
+      "A": [
+        [
+          "B",
+          "C",
+          "D"
+        ],
+        [
+          "A",
+          "tres"
+        ],
+        [
+          "ε"
+        ]
+      ],
+      "B": [
+        [
+          "D",
+          "cuatro",
+          "C",
+          "tres"
+        ]
+      ],
+      "C": [
+        [
+          "cinco",
+          "D",
+          "B"
+        ],
+        [
+          "ε"
+        ]
+      ],
+      "D": [
+        [
+          "ε"
+        ]
+      ]
+    },
+    "FIRST": {
+      "S": [
+        "cuatro",
+        "uno"
+      ],
+      "A": [
+        "cuatro",
+        "ε"
+      ],
+      "B": [
+        "cuatro"
+      ],
+      "C": [
+        "cinco",
+        "ε"
+      ],
+      "D": [
+        "ε"
+      ]
+    },
+    "FOLLOW": {
+      "S": [
+        "$",
+        "dos"
+      ],
+      "A": [
+        "tres",
+        "uno"
+      ],
+      "B": [
+        "$",
+        "cinco",
+        "dos",
+        "tres",
+        "uno"
+      ],
+      "C": [
+        "$",
+        "dos",
+        "tres",
+        "uno"
+      ],
+      "D": [
+        "cuatro",
+        "tres",
+        "uno"
+      ]
+    },
+    "PRED": {
+      "S -> A uno B C": [
+        "cuatro",
+        "uno"
+      ],
+      "S -> S dos": [
+        "cuatro",
+        "uno"
+      ],
+      "A -> B C D": [
+        "cuatro"
+      ],
+      "A -> A tres": [
+        "cuatro"
+      ],
+      "A -> ε": [
+        "tres",
+        "uno"
+      ],
+      "B -> D cuatro C tres": [
+        "cuatro"
+      ],
+      "C -> cinco D B": [
+        "cinco"
+      ],
+      "C -> ε": [
+        "$",
+        "dos",
+        "tres",
+        "uno"
+      ],
+      "D -> ε": [
+        "cuatro",
+        "tres",
+        "uno"
+      ]
+    }
+  },
+  "exercise2": {
+    "productions": {
+      "S": [
+        [
+          "A",
+          "B",
+          "uno"
+        ]
+      ],
+      "A": [
+        [
+          "dos",
+          "B"
+        ],
+        [
+          "ε"
+        ]
+      ],
+      "B": [
+        [
+          "C",
+          "D"
+        ],
+        [
+          "tres"
+        ]
+      ],
+      "C": [
+        [
+          "cuatro",
+          "A",
+          "B"
+        ],
+        [
+          "cinco"
+        ]
+      ],
+      "D": [
+        [
+          "seis"
+        ],
+        [
+          "ε"
+        ]
+      ]
+    },
+    "FIRST": {
+      "S": [
+        "cinco",
+        "cuatro",
+        "dos",
+        "tres"
+      ],
+      "A": [
+        "dos",
+        "ε"
+      ],
+      "B": [
+        "cinco",
+        "cuatro",
+        "tres"
+      ],
+      "C": [
+        "cinco",
+        "cuatro"
+      ],
+      "D": [
+        "seis",
+        "ε"
+      ]
+    },
+    "FOLLOW": {
+      "S": [
+        "$"
+      ],
+      "A": [
+        "cinco",
+        "cuatro",
+        "tres"
+      ],
+      "B": [
+        "cinco",
+        "cuatro",
+        "seis",
+        "tres",
+        "uno"
+      ],
+      "C": [
+        "cinco",
+        "cuatro",
+        "seis",
+        "tres",
+        "uno"
+      ],
+      "D": [
+        "cinco",
+        "cuatro",
+        "seis",
+        "tres",
+        "uno"
+      ]
+    },
+    "PRED": {
+      "S -> A B uno": [
+        "cinco",
+        "cuatro",
+        "dos",
+        "tres"
+      ],
+      "A -> dos B": [
+        "dos"
+      ],
+      "A -> ε": [
+        "cinco",
+        "cuatro",
+        "tres"
+      ],
+      "B -> C D": [
+        "cinco",
+        "cuatro"
+      ],
+      "B -> tres": [
+        "tres"
+      ],
+      "C -> cuatro A B": [
+        "cuatro"
+      ],
+      "C -> cinco": [
+        "cinco"
+      ],
+      "D -> seis": [
+        "seis"
+      ],
+      "D -> ε": [
+        "cinco",
+        "cuatro",
+        "seis",
+        "tres",
+        "uno"
+      ]
+    }
+  }
+}
