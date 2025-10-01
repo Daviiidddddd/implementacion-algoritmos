@@ -1,29 +1,18 @@
-#!/usr/bin/env python3
-# first_follow_pred_full_commented.py
-# Implementación de FIRST, FOLLOW y PREDICCIÓN para gramáticas libres de contexto.
-# Archivo generado y comentado línea a línea por ChatGPT para que puedas entender cada paso.
-#
-# Notas sobre estilo:
-# - Las funciones principales usan recursión con memoización para FIRST (según tu preferencia por recursividad).
-# - FOLLOW se calcula por punto fijo (iterativo) porque es más directo y evita complicar la recursión innecesariamente.
-# - Los comentarios explican la intención y la lógica de cada bloque y las líneas más importantes.
+# David Castellanos código
 
 from typing import Dict, List, Set, Tuple
+from pathlib import Path
 
-# ---------------------------------------------------------------------------
 # Utilidad: reconocer si un símbolo es un no terminal.
 # Aquí definimos nuestra convención: un no terminal es una cadena formada solo por
 # letras y en mayúsculas (por ejemplo, 'S', 'A', 'B').
-# ---------------------------------------------------------------------------
 def is_nonterminal(sym: str) -> bool:
     # Verificamos que sym sea una cadena y que consista de letras y esté en mayúsculas.
     # Esto separa automáticamente terminales como 'a', 'dos', 'uno' (no serán mayúsculas)
     return isinstance(sym, str) and sym.isalpha() and sym.isupper()
 
-# ---------------------------------------------------------------------------
 # Clase Grammar: encapsula una gramática y ofrece métodos FIRST, FIRST(rhs),
 # FOLLOW_ALL y prediction_sets.
-# ---------------------------------------------------------------------------
 class Grammar:
     def __init__(self, productions: Dict[str, List[List[str]]], start: str):
         # productions: diccionario donde la clave es un no terminal 'A' y el valor
@@ -42,10 +31,9 @@ class Grammar:
         self._nullable_cache: Dict[Tuple[str, ...], bool] = {}
         self._follow_cache: Dict[str, Set[str]] = {}
 
-    # ----------------------------- FIRST(X) ---------------------------------
+    # FIRST(X)
     # Calcula FIRST de un no terminal X (con memoización).
     # La implementación es recursiva porque FIRST(X) puede depender de FIRST de otros no terminales.
-    # ------------------------------------------------------------------------
     def first(self, X: str) -> Set[str]:
         # Si ya lo calculamos, lo devolvemos de inmediato.
         if X in self._first_cache:
@@ -74,11 +62,10 @@ class Grammar:
         self._first_cache[X] = result
         return result
 
-    # ------------------------- FIRST de una secuencia ------------------------
+    # FIRST de una secuencia
     # Calcula FIRST(alpha) donde alpha es una tupla de símbolos (terminales/no terminales).
     # Se aplica la regla estándar: iterar de izquierda a derecha, añadir FIRST(si) menos ε,
     # si FIRST(si) contiene ε, continuar; si todos contienen ε, incluir ε.
-    # ------------------------------------------------------------------------
     def first_of_rhs(self, rhs: Tuple[str, ...]) -> Set[str]:
         # Si ya calculamos FIRST(rhs) antes, devolvemos la caché.
         if rhs in self._first_rhs_cache:
@@ -121,17 +108,12 @@ class Grammar:
         self._first_rhs_cache[rhs] = result
         return result
 
-    # --------------------------- derives_epsilon -----------------------------
-    # Determina si una secuencia rhs puede derivar la cadena vacía ε.
-    # Se basa en FIRST(rhs): si ε ∈ FIRST(rhs), entonces rhs deriva ε.
-    # ------------------------------------------------------------------------
+    # determines if rhs can derive epsilon
     def derives_epsilon(self, rhs: Tuple[str, ...]) -> bool:
         return 'ε' in self.first_of_rhs(rhs)
 
-    # ----------------------------- FOLLOW ----------------------------------
-    # Calcula FOLLOW para todos los no terminales usando un algoritmo de punto fijo.
+    # FOLLOW: calcula FOLLOW para todos los no terminales usando un algoritmo de punto fijo.
     # Inicialmente FOLLOW(start) contiene $ y repetimos propagaciones hasta que no cambie.
-    # ------------------------------------------------------------------------
     def follow_all(self) -> Dict[str, Set[str]]:
         # Aseguramos que exista una entrada en el caché para cada no terminal
         for nt in self.productions.keys():
@@ -177,9 +159,8 @@ class Grammar:
         # Devolvemos el diccionario FOLLOW completo
         return self._follow_cache
 
-    # ------------------------ Prediction sets --------------------------------
+    # Prediction sets
     # Para cada producción A -> alpha, PRED(A -> alpha) = FIRST(alpha) - {ε} U (si ε ∈ FIRST(alpha) entonces FOLLOW(A))
-    # ------------------------------------------------------------------------
     def prediction_sets(self) -> Dict[str, Set[str]]:
         preds = {}
         # Aseguramos tener FOLLOW para todas las entradas (se calcula internamente)
@@ -200,7 +181,7 @@ class Grammar:
                 preds[key] = pred
         return preds
 
-# ----------------------------- Helpers -------------------------------------
+# Helpers
 # Función auxiliar para imprimir resultados de forma legible en consola.
 def pretty_print_results(title: str, productions: Dict[str, List[List[str]]], FIRST: Dict[str, Set[str]], FOLLOW: Dict[str, Set[str]], PRED: Dict[str, Set[str]]):
     print('='*60)
@@ -210,18 +191,18 @@ def pretty_print_results(title: str, productions: Dict[str, List[List[str]]], FI
     for A, rhss in productions.items():
         for rhs in rhss:
             print(f'  {A} -> {" ".join(rhs) if rhs else "ε"}')
-    print('\\nFIRST:')
+    print('\nFIRST:')
     for nt in sorted(FIRST.keys()):
         print(f'  FIRST({nt}) = {sorted(list(FIRST[nt]))}')
-    print('\\nFOLLOW:')
+    print('\nFOLLOW:')
     for nt in sorted(FOLLOW.keys()):
         print(f'  FOLLOW({nt}) = {sorted(list(FOLLOW[nt]))}')
-    print('\\nPREDICTION sets:')
+    print('\nPREDICTION sets:')
     for prod in sorted(PRED.keys()):
         print(f'  {prod} -> {sorted(list(PRED[prod]))}')
-    print('='*60 + '\\n')
+    print('='*60 + '\n')
 
-# ------------------------------ Ejemplo de uso ------------------------------
+# Ejemplo de uso
 if __name__ == '__main__':
     # Definimos las gramáticas tal como en la presentación 6 (las dos que usamos antes).
     productions1 = {
@@ -244,7 +225,7 @@ if __name__ == '__main__':
     # Mostramos resultados en consola con formato legible
     pretty_print_results('Ejercicio 1', productions1, FIRST1, FOLLOW1, PRED1)
 
-    # --- Segunda gramática (Ejercicio 2) ---
+    # Segunda gramática (Ejercicio 2)
     productions2 = {
         'S': [['A','B','uno']],
         'A': [['dos','B'], ['ε']],
