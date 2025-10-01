@@ -2,41 +2,40 @@
 
 ### David Castellanos
 
-**Descripción breve**  
-Aca lo que sucede es que este repositorio contiene una implementación en Python de los algoritmos **FIRST**, **FOLLOW** y **PREDICCIÓN** para gramáticas libres de contexto. El objetivo es que puedas entender cómo se calculan estos conjuntos y probarlos con las gramáticas de la presentación 6.
+**Descripción **  
+Este repositorio contiene la implementación en Python de los algoritmos **FIRST**, **FOLLOW** y **PREDICCIÓN** para gramáticas libres de contexto. Acá se probaron con las gramáticas de la presentación 6.
 
 **Contenido principal**  
-- `first_follow_pred_full.py` — Implementación funcional (lista para ejecutar).  
-- `first_follow_pred_full_commented.py` — Versión comentada línea a línea (explicaciones detalladas).  
+
+- `first_follow_pred_full_commented.py` — El script (viene comentado con la explicación de lo q hace linea a linea 
 - `first_follow_pred_results.json` — Resultados generados al ejecutar el script (FIRST, FOLLOW, PRED) para las gramáticas de prueba.  
 - `first_follow_pred_results_commented.json` — Resultados guardados por la versión comentada.  
-- `Ejercicios_David_Castellanos_Final_v2.docx` — Documento con portada, enunciados y soluciones (ya incluido en el trabajo anterior).
 
-## Cómo usarlo (rápido)
-1. Asegúrate de tener Python 3 instalado.  
-2. Ejecuta el script principal:
+
+## Cómo se usa
+Se instala python 3, luego se ejecuta el scrupt principal
 ```
 python3 /mnt/data/first_follow_pred_full.py
 ```
-En pocos segundos verás por consola los conjuntos **FIRST**, **FOLLOW** y **PREDICCIÓN** para las gramáticas incluidas. Los resultados también se guardan en `/mnt/data/first_follow_pred_results.json`.
+Después aparece por consola los conjuntos **FIRST**, **FOLLOW** y **PREDICCIÓN** para las gramáticas incluidas. Los resultados también se guardan acá en `/mnt/data/first_follow_pred_results.json`.
 
-## Explicación didáctica (resumen)
+## Resumen
 Aca lo que sucede es que **FIRST(X)** recoge todos los terminales que pueden aparecer al inicio de cualquier cadena derivada de `X`. En la implementación usamos recursión con memoización para evitar recomputaciones y manejar recursión izquierda sin entrar en bucle infinito.
 
-En este caso, para calcular **FIRST(alpha)** (cuando `alpha` es una secuencia de símbolos) iteramos de izquierda a derecha: si el primer símbolo es terminal, lo tomamos; si es no terminal, añadimos sus FIRST menos ε y solo si ese no terminal puede derivar ε continuamos con el siguiente símbolo. Entonces aca incluimos ε en FIRST(alpha) solo cuando todos los símbolos del prefijo pueden derivar ε.
+En este caso, para calcular **FIRST(alpha)** (cuando `alpha` es una secuencia de símbolos) iteramos de izquierda a derecha: si el primer símbolo es terminal, lo tomamos; entonces si es no terminal, añadimos sus FIRST menos ε y solo si ese no terminal puede derivar ε continuamos con el siguiente símbolo. Entonces aca incluimos ε en FIRST(alpha) solo cuando todos los símbolos del prefijo pueden derivar ε.
 
-Por lo que nos damos cuenta que **FOLLOW(A)** (los símbolos que pueden seguir a `A`) se obtiene por propagación: recorremos cada producción `B -> α A β`, añadimos FIRST(β) menos ε a FOLLOW(A) y, si β puede derivar ε, añadimos FOLLOW(B) a FOLLOW(A). El algoritmo se ejecuta hasta alcanzar un punto fijo.
+Por lo que nos damos cuenta que **FOLLOW(A)** (los símbolos que pueden seguir a `A`) se obtiene por propagación por lo q recorremos cada producción `B -> α A β`, añadimos FIRST(β) menos ε a FOLLOW(A) y, si β puede derivar ε, añadimos FOLLOW(B) a FOLLOW(A). El algoritmo se ejecuta hasta alcanzar un punto fijo.
 
-## PREDICCIÓN
-Aca lo que sucede es que el conjunto de predicción para una producción `A -> α` es: `FIRST(α) - {ε}` U (si `ε ∈ FIRST(α)` entonces `FOLLOW(A)`). Esto es lo que usan los analizadores LL(1) para decidir qué producción aplicar según el símbolo de entrada.
+## Entonces
+Basicamente el conjunto de predicción para una producción `A -> α` es: `FIRST(α) - {ε}` U (si `ε ∈ FIRST(α)` entonces `FOLLOW(A)`). Esto es lo que usan los analizadores LL(1) para decidir qué producción aplicar según el símbolo de entrada.
 
-## Notas finales
+## Conclusiones
 - En este caso la convención para identificar no terminales es: cadenas formadas por letras en **mayúsculas** (ej.: `S`, `A`, `B`). Los terminales pueden ser palabras como `uno`, `dos`, `cinco`, etc.  
-- Entonces aca se incluyen dos gramáticas de prueba (presentación 6) ya definidas dentro de los scripts para que puedas ejecutar y ver resultados inmediatos.  
-- Por lo que nos damos cuenta que el código incluye tanto la versión limpia como la versión comentada para facilitar el estudio y la reutilización.
+- Entonces aca se incluyen dos gramáticas de prueba (las de la presentacion 6) ya definidas dentro de los scripts para poder ejecutar y ver las salidas de los codigos.
+
 
 ---
-Si quieres, genero también un `README.md` dentro del directorio `/mnt/data` (ya lo estoy guardando) y puedo añadir ejemplos de ejecución paso a paso o una sección con trazado de las iteraciones del algoritmo FOLLOW.
+
 
 
 <!-- SALIDAS_REALES_START -->
@@ -119,5 +118,7 @@ Si quieres, genero también un `README.md` dentro del directorio `/mnt/data` (ya
 - S -> A B uno -> { cinco, cuatro, dos, tres }
 
 ---
+
+FIN
 
 <!-- SALIDAS_REALES_END -->
